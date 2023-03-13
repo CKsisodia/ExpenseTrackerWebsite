@@ -67,6 +67,11 @@ export default function ExpenseForm() {
       dispatch(getExpenseDataAction(localId));
     }, 1000);
 
+    setExpenseTitle("");
+    setExpenseAmount("");
+    setExpenseDescription("");
+    setExpenseDate("");
+
     handleClose();
   };
 
@@ -98,6 +103,7 @@ export default function ExpenseForm() {
             type="text"
             fullWidth
             variant="standard"
+            value={expenseTitle}
             onChange={expenseTitleHandler}
           />
 
@@ -109,6 +115,7 @@ export default function ExpenseForm() {
             type="number"
             fullWidth
             variant="standard"
+            value={expenseAmount}
             onChange={expenseAmountHandler}
           />
           <TextField
@@ -119,6 +126,7 @@ export default function ExpenseForm() {
             type="text"
             fullWidth
             variant="standard"
+            value={expenseDescription}
             onChange={expenseDescriptionHandler}
           />
           <TextField
@@ -128,6 +136,7 @@ export default function ExpenseForm() {
             name="Date"
             fullWidth
             variant="standard"
+            value={expenseDate}
             onChange={expenseDateHandler}
           />
         </DialogContent>

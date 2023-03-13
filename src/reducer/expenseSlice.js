@@ -5,12 +5,25 @@ const expenseSlice = createSlice({
   name: "expense",
   initialState: {
     expenseList: [],
+    editForm: false,
+    toBeEditedExpenseData: undefined,
   },
-  reducers: {},
+  reducers: {
+    editFormOpen(state, action) {
+      state.editForm = true;
+      const expenseItemData = action.payload;
+      console.log("in expense slice ", expenseItemData);
+      state.toBeEditedExpenseData = expenseItemData;
+    },
+    cancelEditForm(state, action) {
+      state.editForm = false;
+      state.toBeEditedExpenseData = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getExpenseDataAction.fulfilled, (state, action) => {
       const getExpenseData = action.payload;
-      
+
       const expenseArr = [];
       for (const key in getExpenseData) {
         const newExpense = getExpenseData[key];

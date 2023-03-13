@@ -8,11 +8,19 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteExepnseDataAction, getExpenseDataAction } from "../reducer/asyncExpenseReducer";
+import {
+  deleteExepnseDataAction,
+  getExpenseDataAction,
+} from "../reducer/asyncExpenseReducer";
+import { expenseAction } from "../reducer/expenseSlice";
+import EditExpense from "./EditExpense";
+import { authSliceAction } from "../reducer/authSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,64 +46,121 @@ export default function ExpenseList() {
   const dispatch = useDispatch();
   const userExpenseList = useSelector((state) => state.expense.expenseList);
   const userData = useSelector((state) => state.user.userProfileData);
+  const editFormOpening = useSelector((state) => state.expense.editForm);
+
+  const [amount, setAmount] = React.useState(0);
+  const [removeActivateButton, setRemoveActivateButton] = React.useState(false);
 
   const deleteHandler = (key) => {
-    console.log(" 1 delete key", key);
     const localId = userData.localId;
-    console.log(" 1 localId at deleteHandler", localId);
     dispatch(deleteExepnseDataAction({ key: key, localId: localId }));
-
     setTimeout(() => {
       dispatch(getExpenseDataAction(localId));
     }, 800);
   };
 
-  const editHandler =()=> {
+  const editFormHandler = (editedExpense) => {
+    dispatch(expenseAction.editFormOpen(editedExpense));
+  };
 
-  }
+  React.useEffect(() => {
+    if (userExpenseList.length > 0) {
+      totalAmount();
+    } else {
+      setAmount(0);
+    }
+  }, [userExpenseList]);
+
+  const totalAmount = () => {
+    const itemAmount = userExpenseList.map((item) => {
+      return +item.expenseAmount;
+    });
+    const sum = itemAmount.reduce((prev, curr) => {
+      return prev + curr;
+    });
+    setAmount(sum);
+  };
+
+  const activatePremiumHandler = () => {
+    dispatch(authSliceAction.activatePremium());
+    setRemoveActivateButton(true);
+  };
 
   return (
-    <TableContainer component={Paper} sx={{ mt: "20px" }}>
-      <Table sx={{ minWidth: 600 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Expense Title</StyledTableCell>
-            <StyledTableCell align="left">Amount&nbsp;(INR)</StyledTableCell>
-            <StyledTableCell align="left">Description</StyledTableCell>
-            <StyledTableCell align="left">Date</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {userExpenseList.map((items) => (
-            <StyledTableRow key={items.id}>
-              <StyledTableCell component="th" scope="row">
-                {items.expenseTitle}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {items.expenseAmount}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {items.expenseDescription}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {items.expenseDate}
-              </StyledTableCell>
-              <Stack direction="row" spacing={2}>
-                <Button
-                  variant="outlined"
-                  startIcon={<DeleteIcon />}
-                  onClick={() => deleteHandler(items.key)}
-                >
-                  Delete
-                </Button>
-                <Button variant="contained" endIcon={<EditIcon />} onClick={editHandler}>
-                  Edit
-                </Button>
-              </Stack>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer component={Paper} sx={{ mt: "20px" }}>
+        <Table sx={{ minWidth: 600 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Expense Title</StyledTableCell>
+              <StyledTableCell align="left">Amount</StyledTableCell>
+              <StyledTableCell align="left">Description</StyledTableCell>
+              <StyledTableCell align="left">Date</StyledTableCell>
+              <StyledTableCell align="left"></StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {userExpenseList.map((items) => (
+              <StyledTableRow key={items.id}>
+                <StyledTableCell component="th" scope="row">
+                  {items.expenseTitle}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  ₹{items.expenseAmount}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {items.expenseDescription}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {items.expenseDate}
+                </StyledTableCell>
+                <Stack direction="row" spacing={2} sx={{ mt: "7px" }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => deleteHandler(items.key)}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    variant="contained"
+                    endIcon={<EditIcon />}
+                    onClick={() => editFormHandler(items)}
+                  >
+                    Edit
+                  </Button>
+                </Stack>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {editFormOpening && <EditExpense />}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+          marginTop: 10,
+        }}
+      >
+        <h1>Total Amount :- ₹{amount}</h1>
+        {amount > 10000 ? (
+          <Box>
+            <Button
+              sx={{
+                textTransform: "none",
+                backgroundColor: "yellowgreen",
+                "&:hover": { backgroundColor: "#DC143C" },
+                color: "#111",
+              }}
+              onClick={activatePremiumHandler}
+            >
+              <Typography textAlign="center">Activate Premium</Typography>
+            </Button>
+          </Box>
+        ) : null}
+      </div>
+    </>
   );
 }

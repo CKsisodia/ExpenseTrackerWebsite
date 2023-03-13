@@ -13,6 +13,9 @@ const authSlice = createSlice({
     loginUserData: undefined,
     signUpUserData: undefined,
     userProfileData: undefined,
+    changeMode:false,
+    showDarkMode:false,
+    showDownloadExpenses:false,
   },
   reducers: {
     logOutUser(state, action) {
@@ -20,6 +23,17 @@ const authSlice = createSlice({
       state.loginUserData = undefined;
       state.userProfileData = undefined;
     },
+    changeTheme(state,action){
+      state.changeMode = !state.changeMode;
+    },
+    activatePremium(state,action){
+      state.showDarkMode = true;
+      state.showDownloadExpenses = true;
+    },
+    deactivatePremium(state,action){
+      state.showDarkMode = false;
+      state.showDownloadExpenses = false;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(signUpUserAction.fulfilled, (state, action) => {

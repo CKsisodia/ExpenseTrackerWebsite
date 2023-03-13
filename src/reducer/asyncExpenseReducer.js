@@ -28,3 +28,12 @@ export const deleteExepnseDataAction = createAsyncThunk(
         return response;
     }
 )
+
+export const updateExpenseDataAction = createAsyncThunk(
+    "updateExpenseDataAction",
+    async(updatedData) => {
+        const response = await expenseApiService.updateExpenseData(updatedData);
+        console.log("5, updated Data in async reducer", response)
+        return response;
+    }
+)

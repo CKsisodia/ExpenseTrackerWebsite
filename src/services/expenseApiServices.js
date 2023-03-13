@@ -53,7 +53,31 @@ class ExpenseApiService {
       {
         method: "DELETE",
       }
-    ); 
+    );
+  };
+
+  updateExpenseData = async (updatedExpenseData) => {
+    console.log("updatedExpense Data in API ", updatedExpenseData);
+
+    const response = await fetch(
+      `https://expense-tracker-1311-default-rtdb.firebaseio.com/${updatedExpenseData.localId}/expense_items/${updatedExpenseData.key}.json`,
+
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          expenseTitle: updatedExpenseData.expenseTitle,
+          expenseAmount: updatedExpenseData.expenseAmount,
+          expenseDescription: updatedExpenseData.expenseDescription,
+          expenseDate: updatedExpenseData.expenseDate,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const updatedFinalData = await response.json();
+      console.log("Api firebase response for update data", updatedFinalData);
+      return updatedFinalData;
+    }
   };
 }
 

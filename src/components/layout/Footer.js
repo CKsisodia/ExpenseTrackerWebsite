@@ -11,9 +11,6 @@ const Footer = () => {
           bgcolor: "black",
           color: "#DC143C",
           p: 2,
-          width: "105vw",
-          ml: "-10px",
-          marginBottom: "-10px",
         }}
       >
         <Box
