@@ -281,7 +281,7 @@ function ExpenseAppBar() {
                 marginTop: "8px",
               }}
             >
-              {(userDataShow !== undefined) ? ("Welcome " + userName) : ""}
+              {userDataShow.displayName && "Welcome " + userName}
             </div>
             {!userDataShow && (
               <>
