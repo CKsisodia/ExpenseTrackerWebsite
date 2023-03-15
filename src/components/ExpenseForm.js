@@ -145,7 +145,7 @@ export default function ExpenseForm() {
           <Button onClick={expenseDataHandler}>Add</Button>
         </DialogActions>
       </Dialog>
-      {userExpenseList.length > 0 && <ExpenseList />}
+      {<ExpenseList />}
     </div>
   );
 }

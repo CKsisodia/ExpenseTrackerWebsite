@@ -41,7 +41,7 @@ function App() {
         <ExpenseAppBar />
 
         <Routes>
-          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/home" element={<HomePage />}></Route>
           <Route path="/expenseForm" element={<ExpenseForm />}></Route>
           <Route path="/signup" element={<SignUpUser />}></Route>
           <Route path="/login" element={<LoginUser />}></Route>

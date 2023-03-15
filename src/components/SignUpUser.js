@@ -13,8 +13,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signUpUserAction } from "../reducer/asyncAuthReducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getUserDataAction,
+  signUpUserAction,
+} from "../reducer/asyncAuthReducer";
 
 const theme = createTheme();
 
@@ -29,13 +32,12 @@ const signUpSchema = yup.object().shape({
 });
 
 export default function SignUpUser() {
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const signUpFormSubmitHandler = (data, event) => {
     event.preventDefault();
-    console.log("1, getting data from user through signup form ", data);
-
     dispatch(signUpUserAction({ data }));
   };
 

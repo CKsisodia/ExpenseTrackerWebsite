@@ -47,9 +47,9 @@ export default function ExpenseList() {
   const userExpenseList = useSelector((state) => state.expense.expenseList);
   const userData = useSelector((state) => state.user.userProfileData);
   const editFormOpening = useSelector((state) => state.expense.editForm);
+  const darkMode = useSelector((state) => state.user.showDarkMode);
 
   const [amount, setAmount] = React.useState(0);
-  const [removeActivateButton, setRemoveActivateButton] = React.useState(false);
 
   const deleteHandler = (key) => {
     const localId = userData.localId;
@@ -71,6 +71,12 @@ export default function ExpenseList() {
     }
   }, [userExpenseList]);
 
+  React.useEffect(() => {
+    if (amount < 10000) {
+      dispatch(authSliceAction.deactivatePremium());
+    }
+  }, [amount]);
+
   const totalAmount = () => {
     const itemAmount = userExpenseList.map((item) => {
       return +item.expenseAmount;
@@ -83,22 +89,55 @@ export default function ExpenseList() {
 
   const activatePremiumHandler = () => {
     dispatch(authSliceAction.activatePremium());
-    setRemoveActivateButton(true);
   };
+
+  const deActivatePremiumHandler = () => {
+    dispatch(authSliceAction.deactivatePremium());
+  };
+
+
+
+
+  // const [bgimg, setBgimg] = React.useState("");
+
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setBgimg(<style backgroundColor="green"/>);
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+
+
+
 
   return (
     <>
       <TableContainer component={Paper} sx={{ mt: "20px" }}>
         <Table sx={{ minWidth: 600 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Expense Title</StyledTableCell>
-              <StyledTableCell align="left">Amount</StyledTableCell>
-              <StyledTableCell align="left">Description</StyledTableCell>
-              <StyledTableCell align="left">Date</StyledTableCell>
-              <StyledTableCell align="left"></StyledTableCell>
-            </TableRow>
-          </TableHead>
+          {userExpenseList.length > 0 ? (
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Expense Title</StyledTableCell>
+                <StyledTableCell align="left">Amount</StyledTableCell>
+                <StyledTableCell align="left">Description</StyledTableCell>
+                <StyledTableCell align="left">Date</StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+              </TableRow>
+            </TableHead>
+          ) : (
+            <h1
+              style={{
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              Empty List , Plese add Some Expenses
+            </h1>
+          )}
+
           <TableBody>
             {userExpenseList.map((items) => (
               <StyledTableRow key={items.id}>
@@ -144,22 +183,40 @@ export default function ExpenseList() {
           marginTop: 10,
         }}
       >
-        <h1>Total Amount :- ₹{amount}</h1>
-        {amount > 10000 ? (
-          <Box>
-            <Button
-              sx={{
-                textTransform: "none",
-                backgroundColor: "yellowgreen",
-                "&:hover": { backgroundColor: "#DC143C" },
-                color: "#111",
-              }}
-              onClick={activatePremiumHandler}
-            >
-              <Typography textAlign="center">Activate Premium</Typography>
-            </Button>
-          </Box>
-        ) : null}
+        {userExpenseList.length > 0 ? <h1>Total Amount :- ₹{amount}</h1> : null}
+
+        {amount > 10000 &&
+          (darkMode !== true ? (
+            <div>
+              <Box>
+                <Button
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: "yellowgreen",
+                    "&:hover": { backgroundColor: "#DC143C" },
+                    color: "#111",
+                  }}
+                  onClick={activatePremiumHandler}
+                >
+                  <Typography textAlign="center">Activate Premium</Typography>
+                </Button>
+              </Box>
+            </div>
+          ) : (
+            <Box>
+              <Button
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "red",
+                  "&:hover": { backgroundColor: "orange" },
+                  color: "#111",
+                }}
+                onClick={deActivatePremiumHandler}
+              >
+                <Typography textAlign="center">Deactivate Premium</Typography>
+              </Button>
+            </Box>
+          ))}
       </div>
     </>
   );

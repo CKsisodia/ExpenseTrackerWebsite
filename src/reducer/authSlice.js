@@ -54,7 +54,8 @@ const authSlice = createSlice({
       state.userProfileData = action.payload;
     });
 
-    builder.addCase(updateProfileAction.fulfilled, (state, action) => {});
+    builder.addCase(updateProfileAction.fulfilled, (state, action) => {
+    });
   },
 });
 

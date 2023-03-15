@@ -123,7 +123,7 @@ function ExpenseAppBar() {
       navigate("/userProfile");
     } else if (setting === settings[1]) {
       dispatch(authSliceAction.logOutUser());
-      navigate("/");
+      navigate("/home");
     }
   };
 
@@ -145,6 +145,10 @@ function ExpenseAppBar() {
     console.log("toggling");
   };
 
+  const navToHomePage = () => {
+    navigate("/home");
+  };
+
   return (
     <AppBar position="static" sx={{ bgcolor: "#111", p: 1.5 }}>
       <Container maxWidth="xl">
@@ -153,7 +157,7 @@ function ExpenseAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            onClick={navToHomePage}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -164,6 +168,7 @@ function ExpenseAppBar() {
               textDecoration: "none",
               fontSize: 30,
               gap: "15px",
+              cursor: "pointer",
             }}
           >
             <img
@@ -214,7 +219,7 @@ function ExpenseAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            onClick={navToHomePage}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -226,6 +231,7 @@ function ExpenseAppBar() {
               textDecoration: "none",
               fontSize: 25,
               gap: "15px",
+              cursor: "pointer",
             }}
           >
             <img
@@ -275,7 +281,7 @@ function ExpenseAppBar() {
                 marginTop: "8px",
               }}
             >
-              {userDataShow !== undefined && "Welcome " + userName}
+              {(userDataShow !== undefined) ? ("Welcome " + userName) : ""}
             </div>
             {!userDataShow && (
               <>

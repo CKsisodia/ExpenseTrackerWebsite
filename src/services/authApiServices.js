@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 class ApiUserServices {
   BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
   static getInstance() {
@@ -26,14 +28,14 @@ class ApiUserServices {
 
     if (response.ok) {
       const userData = await response.json();
-      console.log("4, response send by firebase(RESPONSE PAYLOAD)", userData);
+      toast.success("SignUp SuccessFully, Go to Login")
       return userData;
     } else {
       const userData = await response.json();
       let errorMessage = "SignUp-Failed";
       if (userData && userData.error && userData.error.message) {
         errorMessage = userData.error.message;
-        alert(errorMessage);
+        toast.error(errorMessage);
       }
     }
   };
@@ -61,14 +63,14 @@ class ApiUserServices {
 
     if (response.ok) {
       const userData = await response.json();
-      console.log("4, response send by firebase(RESPONSE PAYLOAD)", userData);
+      toast.success("Login SuccessFully")
       return userData;
     } else {
       const userData = await response.json();
       let errorMessage = "Login Failed";
       if (userData && userData.error && userData.error.message) {
         errorMessage = userData.error.message;
-        alert(errorMessage);
+        toast.error(errorMessage);
       }
     }
   };
@@ -136,8 +138,7 @@ class ApiUserServices {
          console.log("44", response)
     if (response.ok) {
       const userprofileData = await response.json();
-      console.log("4, userProfileData at api", userprofileData);
-
+     toast.success("Profile Updated")
       return userprofileData;
     }
   };

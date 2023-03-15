@@ -136,7 +136,7 @@ export default function LoginUser() {
  
   React.useEffect(() => {
     if (loginUserData !== undefined) {
-      navigate("/");
+      navigate("/home");
     }
   }, [loginUserData]);
 

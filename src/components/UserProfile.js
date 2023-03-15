@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { updateProfileAction } from "../reducer/asyncAuthReducer";
+import { getUserDataAction, updateProfileAction } from "../reducer/asyncAuthReducer";
 
 const theme = createTheme();
 
@@ -27,13 +27,15 @@ export default function UserProfile() {
 
   const userProfileHandler = (profileData, event) => {
     event.preventDefault();
-    console.log("1, profileData at component", profileData);
     dispatch(
       updateProfileAction({
         displayName: profileData.displayName,
         photoUrl: profileData.photoUrl,
       })
     );
+    setTimeout(() => {
+      dispatch(getUserDataAction());
+    }, 1000);
   };
 
   const {
@@ -113,13 +115,6 @@ export default function UserProfile() {
             >
               Update
             </Button>
-            {/* <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  New Member ? SignUp Here
-                </Link>
-              </Grid>
-            </Grid> */}
           </Box>
         </Box>
       </Container>
